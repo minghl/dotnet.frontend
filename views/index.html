@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@v3.1.1"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="indexPage">
+      <div class="top">
+        <div class="logo">
+          <span>MinghaoDev</span>
+        </div>
+        <div class="top-menu">
+          <ul>
+            <li>首页</li>
+            <li>收藏本站</li>
+          </ul>
+        </div>
+        <div class="login-pad">
+          <div v-if="userInfo==null">
+            <label>
+              <span>用户名：</span>
+              <input type="text" v-model="userName" />
+            </label>
+            <label for="">
+              <span>密码：</span>
+              <input type="password" v-model="password" />
+            </label>
+            <label for="">
+              <span>验证码：</span>
+              <input type="text" />
+              <b>5656</b>
+            </label>
+            <button @click="onLogin">登陆</button>
+            <button>注册</button>
+          </div>
+          <div v-else>
+            用户：{{userInfo.username}}
+            <button @click="onLogout">注销</button>
+          </div>
+        </div>
+      </div>
+      <div class="center"></div>
+      <div class="bottom"></div>
+    </div>
+  </body>
+  <script>
+    const { createApp, reactive, ref } = Vue;
+
+    const app = createApp({
+      setup() {
+        const userInfo = ref();
+        const userName = ref("");
+        const password = ref("");
+        const onLogin = () => {
+          let name = userName.value;
+          let pwd = password.value;
+          axios
+            .get(
+              `https://localhost:7082/api/Login?userName=${name}&password=${pwd}`
+            )
+            .then((res) => {
+              //   console.log(res);
+              //   userInfo.value = res.data;
+              if (res.status == 200) {
+                userName.value = "";
+                password.value = "";
+                userInfo.value = res.data;
+              }
+            });
+        };
+
+        const onLogout = () => {
+          userInfo.value = null;
+        };
+        return {
+          userInfo,
+          userName,
+          password,
+          onLogin,
+          onLogout,
+        };
+      },
+    });
+
+    app.mount("#indexPage");
+  </script>
+  <style>
+    #indexPage .top {
+      background-color: cornflowerblue;
+      height: 200px;
+      position: relative;
+    }
+    #indexPage .top .top-menu {
+      float: right;
+    }
+    #indexPage .top .top-menu li {
+      float: left;
+      list-style: none;
+      margin-left: 10px;
+    }
+    #indexPage .top .login-pad {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      height: 30px;
+      padding: 10px;
+      padding-bottom: 6px;
+      background-color: beige;
+      border-radius: 6px 0 0 0;
+    }
+    #indexPage .top .login-pad label {
+      margin-right: 10px;
+    }
+    #indexPage .top .login-pad b {
+      background-color: aquamarine;
+      padding: 10px;
+    }
+  </style>
+</html>

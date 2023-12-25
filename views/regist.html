@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@v3.1.1"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="registPage">
+      <div class="regist-pad">
+        <h2>博客注册资料</h2>
+        <p>
+          <label
+            ><span>用&ensp;户&ensp;名</span
+            ><input type="text" v-model="username"
+          /></label>
+        </p>
+        <p>
+          <label><button>检测用户</button></label>
+        </p>
+        <p>
+          <label
+            ><span>密&emsp;&emsp;码</span><input type="text" v-model="password"
+          /></label>
+        </p>
+        <p>
+          <label><span>确认密码</span><input type="text" /></label>
+        </p>
+        <p>
+          <label
+            ><span>性&emsp;&emsp;别</span
+            ><select name="" id="" v-model="sex">
+              <option value="男">女</option>
+              <option value="女">男</option>
+              <option value="保密">保密</option>
+            </select></label
+          >
+        </p>
+        <p>
+          <label
+            ><span>生&emsp;&emsp;日</span><input type="date" v-model="birthday"
+          /></label>
+        </p>
+        <p>
+          <label
+            ><span>密码问题</span><input type="text" v-model="passwordQuestion"
+          /></label>
+        </p>
+        <p>
+          <label
+            ><span>问题答案</span><input type="text" v-model="passowodAnswer"
+          /></label>
+        </p>
+        <p>
+          <label
+            ><span>E-mail</span><input type="text" v-model="email"
+          /></label>
+        </p>
+        <p>
+          <label><span>QQ</span><input type="text" v-model="qq" /></label>
+        </p>
+        <p>
+          <button @click="onRegist">确认</button>
+          <button @click="onCancel">取消</button>
+        </p>
+      </div>
+    </div>
+  </body>
+  <script>
+    const { createApp, reactive, ref, toRefs } = Vue;
+
+    const app = createApp({
+      setup() {
+        const registInfo = reactive({
+          username: "",
+          password: "",
+          sex: "",
+          birthday: "",
+          passwordQuestion: "",
+          passowodAnswer: "",
+          email: "",
+          qq: "",
+        });
+        const onRegist = () => {
+          axios.post(`https://localhost:7082/api/User`, registInfo);
+        };
+        return {
+          ...toRefs(registInfo),
+          onRegist,
+        };
+      },
+    });
+
+    app.mount("#registPage");
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .regist-pad {
+      height: 415px;
+      width: 415px;
+      border: 1px solid #000;
+      margin: auto;
+      margin-top: 20px;
+    }
+    .regist-pad h2 {
+      /* margin-top: 20; */
+      border-top: 20px solid rgb(230, 230, 230);
+      text-align: center;
+    }
+    .regist-pad p {
+      margin: 10px 0;
+    }
+    .regist-pad p span {
+      display: inline-block;
+      width: 96px;
+      text-align: center;
+    }
+    .regist-pad p button {
+      margin-left: 100px;
+    }
+  </style>
+</html>
